@@ -1,5 +1,5 @@
-#Data Aquisition / Managment 0607 02
-#Week One Assignment
+#Data Acquisition / Management 0607 02
+#Week Two Assignment
 
 
 # 1 A vector with 20 numbers
