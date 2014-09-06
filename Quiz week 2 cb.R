@@ -150,7 +150,7 @@ b <- x[2]
 c <- x[3]
 
 root1 <- (-b + sqrt(b^2 - 4*a*c))/(2*a)
-root1 <- (-b - sqrt(b^2 - 4*a*c))/(2*a)
+root2 <- (-b - sqrt(b^2 - 4*a*c))/(2*a)
 
 cat("root one is: ", root1, "\n")
 cat("root two is: ", root2, "\n")

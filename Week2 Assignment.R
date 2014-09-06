@@ -22,7 +22,7 @@ queue <- append(queue, "Pam", 1)
 cat ("Fast-talking Pam arrives: ", queue, "\n")
 
 #  e Harlod has to go
-queue <- queue[2:6]
+queue <- queue[1:5]
 cat ("Harlod takes off: ", queue, "\n")
 
 #  f Alex has a meeting with Harlod
@@ -79,7 +79,7 @@ print(y)
 
 
 #  4 test 3 numbers for Pythagorean triple 
-cat("\n#1\n")
+cat("\n#4\n")
 input.values <- c(readline("Enter three numeric vaues to test seperated by a comma: "))
 
 x <- as.numeric(unlist(strsplit(input.values,",")))
