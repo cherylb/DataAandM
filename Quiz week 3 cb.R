@@ -27,11 +27,12 @@ calcDivsor <- function(input.values){
   x <- abs(as.numeric(unlist(strsplit(input.values,","))))
   test.num <- sort(rep(seq(1,min(x)),length(x))) # all possible integers, repeated for lenght x
   z <- test.num[x %% test.num == 0]
-  return(max(z[duplicated(z)])
+  z <- z[duplicated(z)]
+  return(max(z))
 }
 input.values <- c(readline("To find the largest common divsor,enter two numeric 
                            vaues to test seperated by a comma: "))
-cat ("Greatest common divsor of (", x, ") is: ", calcDivsor(input.values), "\n")
+cat ("Greatest common divsor of (", input.values, ") is: ", calcDivsor(input.values), "\n")
 
 
 #4 using Euclids
@@ -50,10 +51,11 @@ calcEuclid <- function(input.values) {
       q <- b %/% a
       old.r = r
       r <- b - a * q
-      return(old.r)
-    }    
-  }
+    }
+    return(old.r)
+  }    
 }
+
 input.values <- c(readline("To use Eucilds algorithim, enter two numeric vaues to seperated by a comma: "))
 cat("the greatest common factor is: ", calcEuclid(input.values), "\n")
   
@@ -66,7 +68,7 @@ calcVal <- function(input.values){
   return(x^2 * y + 2 * x * y - x*y^2)
 }
 input.values <- c(readline("Enter two numeric vaues for x, y seperated by a comma: "))
-cat("the result is: ", calcVal(input.values), "\n")
+cat("the result of the equation is: ", calcVal(input.values), "\n")
 
 
 # 6 merge two data files
@@ -89,26 +91,25 @@ df <- merge(df.model, df.price, by= "ModelNumber", all = TRUE)
 cat("Number of rows now in merged data frame is: ", nrow(df), "\n")
 
 #8 subset only 2010
-df.tens <- subste(df, Year == 2010)
+df.tens <- subset(df, Year == 2010)
 print("Only 2010:")
-print df.tens
+print(df.tens)
 
 #9 subset only red> $10k
 df.red <- subset(df, Price > 10000 & Color == "Red")
 print("Only Red and > $10,000")
-print df.red
+print(df.red)
 
 #10 No Model num and color
 df.trim <- df.red[ ,!names(df.red) %in% c("Color", "ModelNUmber")]
 print("Exclude color and model number")
-print df.trim
+print (df.trim)
 
 #11 create vector to count number of characters in each element of char vector
 word.length <- function(input.value){
   x <-strsplit(input.value," ")
   y <- nchar(x[[1]])
   names(y) <- x[[1]]
-  
   return(y)
 }
 input.values <- c(readline("Enter a character vector of some kind: "))
