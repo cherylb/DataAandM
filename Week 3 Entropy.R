@@ -9,6 +9,7 @@ entropy <- function (d){
   n <- length(d)
   p.i <- x / n
   e <- -sum(p.i * log2(p.i))
+  return(e)
 }
 
 infogain <- function(d,a){
@@ -21,24 +22,57 @@ infogain <- function(d,a){
   calc.entropy <- function(x){
     #x is a data frame with col d
     d <- x$d
-    print(head(d, 10))
-    print(class(d))
     return(entropy(d))
   }
   
-  ent.a <- p.a * as.numeric(by(df, df$a, calc.entropy))
-  ent.a <- sum(ent.a * log2(ent.a))
-
-  gain <- entropy(df$d) - ent.a
-
-  
-  
-  
-  
-  
+  ent.a <- sum(p.a * (by(df, df$a, calc.entropy)))
+  gain <- entropy(df$d) - ent.a 
+  return(gain)
 }
 
+decide <- function(df, col){
+  # df is the entire data frame
+  # col is the target col number of df
+  
+  d <- df[[col]]  # target
+  a <- df
+  a[[col]] <- NULL  # leaving just attributes
+  gain <- sapply(a, infogain, d = d)
+  best <- sort(gain)[length(gain)]  #in case more than one best
+  col.best <- which(colnames(df)==names(best))
+  z <- list(gain, col.best)
+  return(z)
+}
 
 fileurl= "https://raw.githubusercontent.com/cherylb/DataAandM/master/entropy-test-file.csv"
 data <- getURL(fileurl)
-df.model <- read.csv(text = data)
+dfmain <- read.csv(text = data)
+print("Data looks like: ")
+print(head(dfmain,10))
+
+#1
+cat("\n#1\n")
+target <- dfmain$answer
+e <- entropy(target)
+cat("entropy of target = answer is: ", e, "\n")
+
+#2
+attribute <- dfmain$attr1
+cat("\n\n# 2\n")
+gain <- infogain(target, attribute)
+cat("infogain for attribute 1 is ", gain, "\n")
+
+attribute <- dfmain$attr2
+gain <- infogain(target, attribute)
+cat("infogain for attribute 2 is ", gain, "\n")
+
+attribute <- dfmain$attr3
+gain <- infogain(target, attribute)
+cat("infogain for attribute 3 is ", gain, "\n")
+
+#3
+cat("\n\n# 3\n")
+best <- decide(dfmain, col = 4)
+print("infogain for each attribute is: ")
+print(best[[1]])
+cat("\n column number(s) for attribute with max infogain is: ", best[[2]], "\n")
