@@ -6,7 +6,6 @@ countMissing <- function(input){
    d <- input[is.na(input) != FALSE]
    return(length(d))
 }
-
 input <- c(seq(1:5), NA, NA)
 r <- countMissing(input)
 cat("\n#1\n")
@@ -31,23 +30,18 @@ print(countdfMissing(df.test))
 
 # 3  min, max, mean, median, first quartile, third quartile, sd, num missing of numeric vector
 someStats <- function(input){
-  #sort it
   x <- sort(input)  #this removes any NA values
   l <- length(x)
-  
   #  min
   min.stat <- x[1]  #lowest in list
-  
   #max
   max.stat <- x[l]
-  
   #mean
   if (length(x) != 0){
     mean.stat <- sum(x) / l
   } else {
     mean.stat <- 0
   }
-  
   # median
   calc.med <- function(x){
     l <- length(x)
@@ -58,8 +52,7 @@ someStats <- function(input){
       return(med)
     }
   }
-  
-  med.stat <- calc.med(x)
+   med.stat <- calc.med(x)
  
   # quartiles - m&m method
   l = length(x)
@@ -71,15 +64,12 @@ someStats <- function(input){
     low <- x[1:m]
     up <- x[(m + 2):l]
   }
-  
-  
   #x <- seq(1,20,2)  #test even
   quart.one <- calc.med(low)
   quart.three <- calc.med(up)
   
   
   #standard dev
-  
   sd.stat <- sqrt(sum((x - mean.stat)^2)/(length(x) - 1))
   #check
   sd.stat == sd(x)
@@ -135,7 +125,7 @@ infoLogical <- function(input){
   z <- list(number.true = num.true, number.false = num.false, propor.true = prop.true, num.missing = num.na)
   return(z)
 }
-input4 <- c(rep(c(TRUE, FALSE, NA),3.5), TRUE, TRUE)
+input <- c(rep(c(TRUE, FALSE, NA),3.5), TRUE, TRUE)
 r <- infoLogical(input)
 cat("\n#5\n")
 cat("info about logical input: ", input, "\n")

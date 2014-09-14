@@ -1,6 +1,7 @@
 #  Data Acquisition / Management 0607 02
 #  Week Three - Entropy
 
+#  1 entropy function
 entropy <- function (d){
   # calculate entropy for data population
   # d = data vector
@@ -12,6 +13,7 @@ entropy <- function (d){
   return(e)
 }
 
+#  2  infogain function
 infogain <- function(d,a){
   df <- data.frame(d,a) # put it in data frame
   n <- length(d)  #total n
@@ -30,6 +32,8 @@ infogain <- function(d,a){
   return(gain)
 }
 
+
+#3 decide function
 decide <- function(df, col){
   # df is the entire data frame
   # col is the target col number of df
@@ -38,12 +42,15 @@ decide <- function(df, col){
   a <- df
   a[[col]] <- NULL  # leaving just attributes
   gain <- sapply(a, infogain, d = d)
-  best <- sort(gain)[length(gain)]  #in case more than one best
-  col.best <- which(colnames(df)==names(best))
+  best <- sort(gain)[length(gain)]  
+  col.best <- which(colnames(df)==names(best))  # in case more than one best
   z <- list(gain, col.best)
   return(z)
 }
 
+
+library(RCurl)
+options(RCurlOptions = list(cainfo = system.file("CurlSSL", "cacert.pem", package = "RCurl")))
 fileurl= "https://raw.githubusercontent.com/cherylb/DataAandM/master/entropy-test-file.csv"
 data <- getURL(fileurl)
 dfmain <- read.csv(text = data)
