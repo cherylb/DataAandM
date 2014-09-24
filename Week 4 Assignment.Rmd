@@ -10,7 +10,9 @@ Both the average rating and the number of votes are normally distributed.
 
 
 ### Import Data
-```{r}
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width=120)
+
 library(dplyr)
 library(ggplot2)
 library(reshape2)
@@ -88,7 +90,7 @@ cuts <- rate.95$cutoff
 names(cuts) = rate.95$variable
 ```
 
-Select the 'best' five movies in each genre
+Select the 'best' movies in each genre
 
 ```{r bests}
 # year + title identifies the movie
@@ -105,11 +107,15 @@ xx <- best.movies[order(best.movies$titleyear, -best.movies$score),]
 xx <- xx[!duplicated(xx$titleyear),]
 
 ```
-### The list of best popular movies, sorted by genre and then title
+### The list of best popular movies, sorted by genre and then score
 There is no distinct film in the genre Documentary that meets the criteria of being in the 95th percentile for both rating and votes
+Listing the top five in each
 ```{r}
 
-list.of.movies <- xx[order(xx$genre, xx$titleyear),]
+list.of.movies <- select(xx[order(xx$genre, -xx$score),], genre, title, year, rating, votes, score)
+
+# top five in each
+(by(data = list.of.movies, INDICES = list.of.movies$genre, FUN = function(x) head(x, 5)))
 
 print("Count by genre, Documentary has no distinct film that meets both criteria")
 
