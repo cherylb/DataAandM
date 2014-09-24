@@ -1,0 +1,123 @@
+Week 4 Assignment - Using Movies data set
+Which year were the best popular movies made?
+
+========================================================
+Definitions:
+'Best' movies are defined here as movies with the highest average rating within each genre. It is important to define what is best for each genre because each genre has a distinct mean, and a 'best' average rating in one particular genre may not be a 'best' rating in another.
+
+'Popular' movies are defined here as movies receiving a high number of votes, inferring that movies with a large number of votes were seen by a corresponding large number of people, and can be considered popular. 
+Both the average rating and the number of votes are normally distributed. 
+
+
+### Import Data
+```{r}
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+
+(df.movies <- tbl_df(read.table("movies.tab", sep="\t", header=TRUE, quote="", comment="")))
+
+```
+### Each genre has a different distribution of ratings and votes, so it is important to consider them seperatly
+
+Votes - comparison of means
+The anova results in rejection of the hypothesis that the theoretical mean is the same across genres
+A simple bar chart illustrates the variability between genres
+```{r}
+genres = seq(length(df.movies)-6,length(df.movies))
+names(genres) = tail(colnames(df.movies), 7)
+
+m.vote <- filter(group_by(melt(select(df.movies,votes, rating, genres),
+                               id =  c("rating", "votes")),variable),value!=0)
+m.vote  <- filter(melt(select(df.movies, votes, genres), id = "votes"), value != 0)
+aov.out <- aov(value ~ variable, data = m.vote)
+summary.lm(aov.out)
+s.len <- summarise(group_by(m.vote, variable), avg.vote = mean(votes))
+c <- ggplot(data = s.len, aes(x = variable, y = avg.vote, fill = variable)) 
+c + geom_bar(stat = "identity") + geom_hline(aes(yintercept = mean(s.len$avg.vote)),colour = "red")
+
+```
+
+Ratings - comparison of means
+The anova results in rejection of the hypothesis that the theoretical mean is the same across genres
+A simple bar chart illustrates the variability between genres
+```{r}
+m.rate  <- filter(melt(select(df.movies, rating, genres), id = "rating"), value != 0)
+aov.out <- aov(value ~ variable, data = m.rate)
+summary.lm(aov.out)
+s.len <- summarise(group_by(m.rate, variable), avg.rate = mean(rating))
+ggplot(data = s.len, aes(x = variable, y = avg.rate, fill = variable)) + geom_bar(stat = "identity" ) + geom_hline(yintercept = mean(s.len$avg.rate), colour = "red")
+                                                                                                            
+```
+
+### Selecting and plotting a subset of data to include just those movies that meet the folowing criteria:
+
+Number of votes is in the upper 1%  for the genre
+Rating is in the upper 1% for the genre
+
+# Calculate the cutoff for the upper 95% of votes for each genre
+```{r norm_figs, fig.width = 8, fig.height = 6, dev='svg'}
+
+#Dist. of votes, only intersted in uppper tail
+summary(df.movies$votes)
+
+m.vote <- filter(group_by(melt(select(df.movies,votes, genres), id =  "votes"), 
+                       variable),value!=0)
+
+# looking at top 95% of the votes
+
+print("Table of 95 percentile of votes by genre")
+
+(vote.95 <- summarise(m.vote, cutoff.v = quantile(votes, .95)))
+cuts.v <- vote.95$cutoff.v
+names(cuts.v) = vote.95$variable
+
+
+```
+
+### 95% percentile rating for each genre
+```{r cutoffrate}
+#summary of all rating, only interested in upper tail
+summary(df.movies$rating)
+
+m.rate <- filter(group_by(melt(select(df.movies, rating, genres), id =  "rating"), 
+                          variable),value!=0)
+print("Table of 95 percentile of ratings by genre")
+(rate.95 <- summarise(m.rate, cutoff.r = quantile(rating, .95)))
+cuts <- rate.95$cutoff
+names(cuts) = rate.95$variable
+```
+
+Select the 'best' five movies in each genre
+
+```{r bests}
+# year + title identifies the movie
+m <- select(df.movies, title, year, genres, votes, rating)
+mtop <- filter(melt(m, id =  c("rating", "votes", "year", "title")), value != 0)
+mtop  <- merge(mtop, rate.95,  by.mtop = "variable", by.rate.95 = "variable")
+mtop  <- filter(merge(mtop, vote.95,  by.mtop = "variable", by.vote.95 = "variable"), rating >= cutoff.r, votes >= cutoff.v)
+
+# organizaing DAta
+
+best.movies <- cbind(select(mtop, variable, title, year, rating, votes), score = mtop$rating * mtop$votes/1000, titleyear = paste(mtop$title, " - ", mtop$year))
+colnames(best.movies)[1] = 'genre'
+xx <- best.movies[order(best.movies$titleyear, -best.movies$score),]
+xx <- xx[!duplicated(xx$titleyear),]
+
+```
+### The list of best popular movies, sorted by genre and then title
+There is no distinct film in the genre Documentary that meets the criteria of being in the 95th percentile for both rating and votes
+```{r}
+
+list.of.movies <- xx[order(xx$genre, xx$titleyear),]
+
+print("Count by genre, Documentary has no distinct film that meets both criteria")
+
+print(table(list.of.movies$genre))
+
+
+print("Summary Stats")
+print(summarise(group_by(list.of.movies, genre), total.titles = length(titleyear), max.rate = max(rating), max.votes= max(votes), max.total = max(score)))
+
+```
+

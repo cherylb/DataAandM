@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title></title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<p>Week 4 Assignment - Using Movies data set
+Which year were the best popular movies made?</p>
+
+<h1></h1>
+
+<p>Definitions:
+&#39;Best&#39; movies are defined here as movies with the highest average rating within each genre. It is important to define what is best for each genre because each genre has a distinct mean, and a &#39;best&#39; average rating in one particular genre may not be a &#39;best&#39; rating in another.</p>
+
+<p>&#39;Popular&#39; movies are defined here as movies receiving a high number of votes, inferring that movies with a large number of votes were seen by a corresponding large number of people, and can be considered popular. 
+Both the average rating and the number of votes are normally distributed. </p>
+
+<h3>Import Data</h3>
+
+<pre><code class="r">library(dplyr)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+## 
+## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag
+## 
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+
+<pre><code class="r">library(ggplot2)
+library(reshape2)
+
+(df.movies &lt;- tbl_df(read.table(&quot;movies.tab&quot;, sep=&quot;\t&quot;, header=TRUE, quote=&quot;&quot;, comment=&quot;&quot;)))
+</code></pre>
+
+<pre><code>## Source: local data frame [58,788 x 24]
+## 
+##                       title year length budget rating votes   r1   r2  r3
+## 1                         $ 1971    121     NA    6.4   348  4.5  4.5 4.5
+## 2         $1000 a Touchdown 1939     71     NA    6.0    20  0.0 14.5 4.5
+## 3    $21 a Day Once a Month 1941      7     NA    8.2     5  0.0  0.0 0.0
+## 4                   $40,000 1996     70     NA    8.2     6 14.5  0.0 0.0
+## 5  $50,000 Climax Show, The 1975     71     NA    3.4    17 24.5  4.5 0.0
+## 6                     $pent 2000     91     NA    4.3    45  4.5  4.5 4.5
+## 7                   $windle 2002     93     NA    5.3   200  4.5  0.0 4.5
+## 8                      &#39;15&#39; 2002     25     NA    6.7    24  4.5  4.5 4.5
+## 9                       &#39;38 1987     97     NA    6.6    18  4.5  4.5 4.5
+## 10                  &#39;49-&#39;17 1917     61     NA    6.0    51  4.5  0.0 4.5
+## ..                      ...  ...    ...    ...    ...   ...  ...  ... ...
+## Variables not shown: r4 (dbl), r5 (dbl), r6 (dbl), r7 (dbl), r8 (dbl), r9
+##   (dbl), r10 (dbl), mpaa (fctr), Action (int), Animation (int), Comedy
+##   (int), Drama (int), Documentary (int), Romance (int), Short (int)
+</code></pre>
+
+<h3>Each genre has a different distribution of ratings and votes, so it is important to consider them seperatly</h3>
+
+<p>Votes - comparison of means
+The anova results in rejection of the hypothesis that the theoretical mean is the same across genres
+A simple bar chart illustrates the variability between genres</p>
+
+<pre><code class="r">genres = seq(length(df.movies)-6,length(df.movies))
+names(genres) = tail(colnames(df.movies), 7)
+
+m.vote &lt;- filter(group_by(melt(select(df.movies,votes, rating, genres),
+                               id =  c(&quot;rating&quot;, &quot;votes&quot;)),variable),value!=0)
+m.vote  &lt;- filter(melt(select(df.movies, votes, genres), id = &quot;votes&quot;), value != 0)
+aov.out &lt;- aov(value ~ variable, data = m.vote)
+summary.lm(aov.out)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## aov(formula = value ~ variable, data = m.vote)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -2.65e-10  0.00e+00  0.00e+00  0.00e+00  6.00e-14 
+## 
+## Coefficients:
+##                     Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept)         1.00e+00   1.52e-14 6.58e+13  &lt; 2e-16 ***
+## variableAnimation   5.66e-14   2.29e-14 2.47e+00  0.01337 *  
+## variableComedy      5.66e-14   1.71e-14 3.31e+00  0.00095 ***
+## variableDrama       5.66e-14   1.67e-14 3.38e+00  0.00072 ***
+## variableDocumentary 5.66e-14   2.33e-14 2.43e+00  0.01504 *  
+## variableRomance     5.66e-14   2.14e-14 2.64e+00  0.00820 ** 
+## variableShort       5.66e-14   1.86e-14 3.05e+00  0.00230 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.04e-12 on 65127 degrees of freedom
+## Multiple R-squared:   0.5,   Adjusted R-squared:   0.5 
+## F-statistic: 1.09e+04 on 6 and 65127 DF,  p-value: &lt;2e-16
+</code></pre>
+
+<pre><code class="r">s.len &lt;- summarise(group_by(m.vote, variable), avg.vote = mean(votes))
+c &lt;- ggplot(data = s.len, aes(x = variable, y = avg.vote, fill = variable)) 
+c + geom_bar(stat = &quot;identity&quot;) + geom_hline(aes(yintercept = mean(s.len$avg.vote)),colour = &quot;red&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/> </p>
+
+<p>Ratings - comparison of means
+The anova results in rejection of the hypothesis that the theoretical mean is the same across genres
+A simple bar chart illustrates the variability between genres</p>
+
+<pre><code class="r">m.rate  &lt;- filter(melt(select(df.movies, rating, genres), id = &quot;rating&quot;), value != 0)
+aov.out &lt;- aov(value ~ variable, data = m.rate)
+summary.lm(aov.out)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## aov(formula = value ~ variable, data = m.rate)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -2.65e-10  0.00e+00  0.00e+00  0.00e+00  6.00e-14 
+## 
+## Coefficients:
+##                     Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept)         1.00e+00   1.52e-14 6.58e+13  &lt; 2e-16 ***
+## variableAnimation   5.66e-14   2.29e-14 2.47e+00  0.01337 *  
+## variableComedy      5.66e-14   1.71e-14 3.31e+00  0.00095 ***
+## variableDrama       5.66e-14   1.67e-14 3.38e+00  0.00072 ***
+## variableDocumentary 5.66e-14   2.33e-14 2.43e+00  0.01504 *  
+## variableRomance     5.66e-14   2.14e-14 2.64e+00  0.00820 ** 
+## variableShort       5.66e-14   1.86e-14 3.05e+00  0.00230 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.04e-12 on 65127 degrees of freedom
+## Multiple R-squared:   0.5,   Adjusted R-squared:   0.5 
+## F-statistic: 1.09e+04 on 6 and 65127 DF,  p-value: &lt;2e-16
+</code></pre>
+
+<pre><code class="r">s.len &lt;- summarise(group_by(m.rate, variable), avg.rate = mean(rating))
+ggplot(data = s.len, aes(x = variable, y = avg.rate, fill = variable)) + geom_bar(stat = &quot;identity&quot; ) + geom_hline(yintercept = mean(s.len$avg.rate), colour = &quot;red&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-3"/> </p>
+
+<h3>Selecting and plotting a subset of data to include just those movies that meet the folowing criteria:</h3>
+
+<p>Number of votes is in the upper 1%  for the genre
+Rating is in the upper 1% for the genre</p>
+
+<h1>Calculate the cutoff for the upper 95% of votes for each genre</h1>
+
+<pre><code class="r">#Dist. of votes, only intersted in uppper tail
+summary(df.movies$votes)
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##       5      11      30     632     112  158000
+</code></pre>
+
+<pre><code class="r">m.vote &lt;- filter(group_by(melt(select(df.movies,votes, genres), id =  &quot;votes&quot;), 
+                       variable),value!=0)
+
+# looking at top 95% of the votes
+
+print(&quot;Table of 95 percentile of votes by genre&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Table of 95 percentile of votes by genre&quot;
+</code></pre>
+
+<pre><code class="r">(vote.95 &lt;- summarise(m.vote, cutoff.v = quantile(votes, .95)))
+</code></pre>
+
+<pre><code>## Source: local data frame [7 x 2]
+## 
+##      variable cutoff.v
+## 1      Action  10800.9
+## 2   Animation    447.7
+## 3      Comedy   3536.0
+## 4       Drama   3549.0
+## 5 Documentary    264.9
+## 6     Romance   7087.9
+## 7       Short     95.0
+</code></pre>
+
+<pre><code class="r">cuts.v &lt;- vote.95$cutoff.v
+names(cuts.v) = vote.95$variable
+</code></pre>
+
+<h3>95% percentile rating for each genre</h3>
+
+<pre><code class="r">#summary of all rating, only interested in upper tail
+summary(df.movies$rating)
+</code></pre>
+
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    5.00    6.10    5.93    7.00   10.00
+</code></pre>
+
+<pre><code class="r">m.rate &lt;- filter(group_by(melt(select(df.movies, rating, genres), id =  &quot;rating&quot;), 
+                          variable),value!=0)
+print(&quot;Table of 95 percentile of ratings by genre&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Table of 95 percentile of ratings by genre&quot;
+</code></pre>
+
+<pre><code class="r">(rate.95 &lt;- summarise(m.rate, cutoff.r = quantile(rating, .95)))
+</code></pre>
+
+<pre><code>## Source: local data frame [7 x 2]
+## 
+##      variable cutoff.r
+## 1      Action      7.7
+## 2   Animation      8.3
+## 3      Comedy      8.1
+## 4       Drama      8.2
+## 5 Documentary      9.0
+## 6     Romance      8.1
+## 7       Short      8.8
+</code></pre>
+
+<pre><code class="r">cuts &lt;- rate.95$cutoff
+names(cuts) = rate.95$variable
+</code></pre>
+
+<p>Select the &#39;best&#39; five movies in each genre</p>
+
+<pre><code class="r"># year + title identifies the movie
+m &lt;- select(df.movies, title, year, genres, votes, rating)
+mtop &lt;- filter(melt(m, id =  c(&quot;rating&quot;, &quot;votes&quot;, &quot;year&quot;, &quot;title&quot;)), value != 0)
+mtop  &lt;- merge(mtop, rate.95,  by.mtop = &quot;variable&quot;, by.rate.95 = &quot;variable&quot;)
+mtop  &lt;- filter(merge(mtop, vote.95,  by.mtop = &quot;variable&quot;, by.vote.95 = &quot;variable&quot;), rating &gt;= cutoff.r, votes &gt;= cutoff.v)
+
+# organizaing DAta
+
+best.movies &lt;- cbind(select(mtop, variable, title, year, rating, votes), score = mtop$rating * mtop$votes/1000, titleyear = paste(mtop$title, &quot; - &quot;, mtop$year))
+colnames(best.movies)[1] = &#39;genre&#39;
+xx &lt;- best.movies[order(best.movies$titleyear, -best.movies$score),]
+xx &lt;- xx[!duplicated(xx$titleyear),]
+</code></pre>
+
+<h3>The list of best popular movies, sorted by genre and then title</h3>
+
+<p>There is no distinct film in the genre Documentary that meets the criteria of being in the 95th percentile for both rating and votes</p>
+
+<pre><code class="r">list.of.movies &lt;- xx[order(xx$genre, xx$titleyear),]
+
+print(&quot;Count by genre, Documentary has no distinct film that meets both criteria&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Count by genre, Documentary has no distinct film that meets both criteria&quot;
+</code></pre>
+
+<pre><code class="r">print(table(list.of.movies$genre))
+</code></pre>
+
+<pre><code>## 
+##      Action   Animation      Comedy       Drama Documentary     Romance 
+##          51           8          37          75           0           4 
+##       Short 
+##           4
+</code></pre>
+
+<pre><code class="r">print(&quot;Summary Stats&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Summary Stats&quot;
+</code></pre>
+
+<pre><code class="r">print(summarise(group_by(list.of.movies, genre), total.titles = length(titleyear), max.rate = max(rating), max.votes= max(votes), max.total = max(score)))
+</code></pre>
+
+<pre><code>## Source: local data frame [6 x 5]
+## 
+##       genre total.titles max.rate max.votes max.total
+## 1    Action           51      9.0    157608  1386.950
+## 2 Animation            8      8.8     41846   347.322
+## 3    Comedy           37      8.7     89722   735.720
+## 4     Drama           75      9.1    149494  1360.395
+## 5   Romance            4      8.3     28836   233.572
+## 6     Short            4      9.0       408     3.604
+</code></pre>
+
+</body>
+
+</html>
+
