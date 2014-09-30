@@ -1,0 +1,207 @@
+
+Earthquake Data
+========================================================
+***Description of data: Earthquake source parameters produced by contributing siesmic networks***
+* Data Source:  ANSS Comprehensive Catalog hosted by the Northern California Earthquake Data Center
+* Search URL:   http://quake.geo.berkeley.edu/anss/catalog-search.html
+
+***Data extract parameters***
+*  years: 1960 - 2014
+*  Minimum magnitude: 2
+*  Geographic Region: 120W to 130W,30N to 40N, primarily Northern California
+*  Events: All events excluding Acoustic Noise and Chemical events
+
+### Data
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width=120)
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+path <- "C:/Users/Cheryl/Documents/GitHub/DataAandM/equake3.csv"
+df <- tbl_df(read.csv(path, header=TRUE, stringsAsFactors = FALSE))
+(str(df))
+```
+
+### Descriptions of fields
+
+***Attributes***
+* time:  Date - Time of event
+* latitude:  geographic latitude
+* longitude: geographic longitude
+* nst:  The total number of number of seismic stations which reported P- and S-arrival times for this earthquake.
+* gap:  The largest azimuthal gap between azimuthally adjacent stations (in degrees). In general, the smaller this number, the more reliable is the calculated horizontal position of the earthquake
+typically [0 - 180]
+* dmin:  Horizontal distance from the epicenter to the nearest station (in degrees). 1 degree is approximately 111.2 kilometers. In general, the smaller this number, the more reliable is the calculated depth of the earthquake. Typically: [0.4, 7.1]
+* magType: Scale used to measure magnitude, commonly:local magnitude (ML),surface-wave magnitude (Ms), body-wave magnitude (Mb), moment magnitude (Mw). All magnitude scales should yield approximately the same value for any given earthquake
+* net:  The ID of a data contributor. Identifies the network considered to be the preferred source of information for this event. Typical values: [ak, at, ci, hv, ld, ...,  pr, pt, se, us, uu, uw ]
+* id: A comma-separated list of event ids that are associated to an event
+* updated:  Time when the event was most recently updated.
+* place:  Textual description of named geographic region near to the event. 
+
+***Variables***
+* depth:  Depth of the event in kilometers, typically [0, 1000]
+* mag:  The magnitude for the event, typically [-1.0, 10]
+* rms:  The root-mean-square (RMS) travel time residual, in sec, using all weights. This parameter provides a measure of the fit of the observed arrival times to the predicted arrival times for this location. Smaller numbers reflect a better fit of the data. Typically: [0.13, 1.39]
+
+```{r}
+
+countMissing <- function(input){
+   d <- input[is.na(input) != FALSE]
+   return(length(d))
+}
+countdfMissing <- function(input){
+  z<- sapply(input, function(x) countMissing(x))
+  return(z)
+}
+
+nst.miss <- df %>%select(nst,net)%>% filter(is.na(nst))%>%group_by(net)%>%summarise(count = n())
+gap.miss <- df %>%select(gap,nst)%>% filter(is.na(gap))%>%group_by(nst)%>%summarise(count = n())
+dmin.miss <- df %>%select(dmin,nst, net)%>% filter(is.na(dmin))%>%group_by(net)%>%summarise(count = n())
+rms.miss <- df %>%select(rms, dmin)%>% filter(is.na(rms))%>%group_by(dmin)%>%summarise(count = n())
+                                                    
+```
+### data summary and missing values
+
+*  Number of observations:  `r nrow(df)`
+*  Number of complete rows:  `r nrow(df[complete.cases(df) == TRUE,])`
+*  Fields with missing data:  
+```{r} 
+countdfMissing(df)
+```
+
+There is a substantial amount of missing data, but the missing values may not impact some types of  analysis.  Missing values within the data are mostly in the descriptive attributes, and are all related to the network or system used for collecting the data, and may reflect limited reporting from the system.  There are no missing values in the magnitude, depth, time, location, or type fields, so analysis involving the events and not concerned with the method of data collection would not be impacted by these missing values. 
+
+Missing values in nst are related to the network, most of the missing gap values are related to the missing nst value:
+
+```{r}
+# nst missing
+nst.miss
+
+# gap missing
+head(arrange(gap.miss, desc(count)))
+```
+
+Almost all of the missing dmin values are coming a particular network: pde. The missing data in rms is directly related to the missing data in dmin, which follows because rms is a measure of fitness of a model for dmin
+```{r}
+# dmin missing
+head(arrange(dmin.miss, desc(count)))
+
+#rms missing
+rms.miss
+```
+
+## scope of this analysis
+This analysis is primarily interested in the data related seismic events and their locations, and will select a subset of the data which excludes the missing values to evaluate.
+
+***Data transformations used***
+* city or place names were extracted from the place column
+* latitude and longitude were rounded to the nearest whole value
+* date and time were separated, only month and year included in the analysis
+* magnitudes were grouped in 10 intervals from in = 2 to max = 6.9
+
+```{r}
+pat <- "([A-Za-z ]* [A-Za-z0-9]*[, ]*[CaA-Za-z]*$)"
+grups <- seq(min(df$mag), max(df$mag),.5)
+
+df.quake <- select(df, which(countdfMissing(df)== 0))
+df.quake <- df.quake %>% separate(time, c("year", "month", "day","D"), sep = c("[-T]")) %>% 
+  extract(place, "place2", pat) %>% mutate(place2 = gsub("^.*?of ","",place2)) %>%
+  mutate(lat = round(latitude,digits =1), long = round(longitude, digits = 1), year = as.numeric(year), month = as.numeric(month)) %>%
+  select(year, month, lat, long, depth, mag, place2, type, magType) %>% 
+  mutate(mag.group = grups[findInterval(mag, grups)], lat.rnd = round(lat,0), long.rnd = round(long,0))%>% arrange(-mag,year)
+
+s4 <- df.quake %>% group_by(type) %>% summarise( avgmag = mean(mag), avgdepth = mean(depth), numevents = n()) %>% arrange(-avgmag)
+
+s1 <- df.quake %>% group_by(place2) %>% summarise( avgmag = mean(mag), avgdepth = mean(depth), numevents = n()) %>% arrange(-avgmag)
+
+s2 <- df.quake %>% group_by(month) %>% summarise( avgmag = mean(mag), avgdepth = mean(depth), numevents = n()) %>% arrange(-numevents)
+
+s3 <- df.quake %>% group_by(year) %>% summarise( avgmag = mean(mag), avgdepth = mean(depth), numevents = n()) %>% arrange(-avgmag)
+
+s7 <- df.quake %>% group_by(magType) %>% summarise( avgmag = mean(mag), avgdepth = mean(depth), numevents = n()) %>% arrange(-numevents)
+
+```
+
+Data used in this analysis:
+````{r}
+head(df.quake)
+```
+
+### Summary Statistics
+```{r}
+(summary(df.quake))
+
+# Summary of locations top 20 average magnitude:
+head(s1,20)
+
+# Summary of locations top 20 number of recorded events:
+head(arrange(s1, -numevents),20)
+
+# Summary of event type
+s4
+
+#Summary of average number of events by month
+s2
+
+#Summary of top 10 average magnitude by year
+head(s3, 10)
+
+# Summary of magnitude and depth by magType
+s7
+
+```
+
+***Earthquake Weather***
+Number of events by month. An anova model indicates it is unlikely different months have different means, and consequently the term 'earthquake weather' is shown to be meaningless.
+
+```{r}
+#  number of events by month
+c <- ggplot(data = s2, aes(x = month, y = numevents, fill = month)) 
+c + geom_bar(stat = "identity") + geom_hline(aes(yintercept = mean(s2$numevents)),colour = "red")+ ggtitle("Avg Numberof Events by Month")
+
+aov.out <- aov(numevents ~ month, data = s2)
+(summary.lm(aov.out))
+
+```
+
+*** magnitude by year or location ***
+The plots of magnitude by year, broken out by longitude and by longitude, show, as would be expected, a higher frequency and magnitude within certain geographic areas.
+```{r}
+# magnitude by year, split by longitude
+(m1 <- qplot(data = df.quake, x = year, y = mag, colour = long.rnd, facets = ~ long.rnd))
+# magnitude by longitude, split by latitude
+(m2 <- qplot(data = df.quake,  x = long, y = mag, colour = lat.rnd, facets = ~ lat.rnd))
+```
+
+*** magnitude related to magnitude type ***
+Different methods (magType) are used for calculating the magnitude, apparently directly related to  the magnitude and depth
+```{r}
+c <- ggplot(data = s7, aes(x = magType, y = avgmag, fill = avgdepth)) 
+c + geom_bar(stat = "identity") + geom_hline(aes(yintercept = mean(s7$avgmag)),colour = "red")+ ggtitle("Avg Magnitude by Type")
+
+aov.out <- aov(mag ~ magType, data = df.quake)
+summary(lm(aov.out))
+```
+### Additional Comparisons
+*  A mapping geographic coordinates shows the expected correlation between frequency and geographic location. 
+*  Higher magnitude are clustered chiefly between depth of 0 and 20, methods of measuring magnitude is related to the magnitude.
+*  Depth appears to vary slightly across different latitudes
+*  Based on the data provided, there appears to be an inverse relationship between overall magnitude and year. This should be interpreted cautiously, as the increased sensitivity and prevalence of data collection over time would increase the number small magnitude observations.
+
+```{r}
+# fequency
+m3 <- qplot(data = df.quake, x = long, y = lat, colour = depth)+ stat_smooth(method = "lm") + scale_y_continuous(limits= c(30,40)) + ggtitle("Geographic Location")
+m4 <- qplot(data = df.quake, x = depth, y = mag, colour = magType) + ggtitle("Magnitude by Depth")
+m5 <- qplot(data = df.quake, x = lat, y = depth, colour = mag.group)+ ggtitle("Depth by Geo Code")
+m6 <- qplot(data = df.quake, x = year, y = mag, colour = depth)+stat_smooth(method=lm) + ggtitle("Overall Magnitude by Year")
+```
+
+```{r fig.width = 10, fig.height =6}
+grid.arrange(m3,m4,m5,m6, ncol=2, main = "Magnitude and Depth")
+```
+
+
