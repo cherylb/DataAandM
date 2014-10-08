@@ -1,4 +1,4 @@
-#  Week 4 Assignment
+#  Week 6 Assignment
 #  using rvest to pull data from a web page. In this case rvest is looking at itself
 
 #-------------------------------------------------------------------------------------------
