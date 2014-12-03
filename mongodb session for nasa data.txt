@@ -1,0 +1,65 @@
+> r = function(key, values){
+... var result = {total: 0, cont_name: 0};
+
+... values.forEach(function(value)){
+... result.total += (value.total !== null);
+... if(result.cont_name === 0 &&
+... value.cont_name !== null
+... ){
+... result.cont_name = value.cont_name;
+... }
+... });
+... return result;
+... }
+2014-11-09T19:07:17.179-0800 SyntaxError: Unexpected token
+
+> map_total = function(){ if(this.Decay !=="TRUE"){emit(this.COSPAR_ID,{cont_nam
+e:0,total:1})}}
+function (){ if(this.Decay !=="TRUE"){emit(this.COSPAR_ID,{cont_name:0,total:1})
+}}
+> map_cont = function() { emit(this.COSPAR_Number, {cont_name: this.Contractor,
+total:0})}
+function () { emit(this.COSPAR_Number, {cont_name: this.Contractor, total:0})}
+> r = function(key, values{
+... var restult = {total: 0, cont_name: 0};
+... values.forEach(function(value)){
+... result.total += (value.total !== null);
+... if(result.cont_name ===0 &&
+... value.cont_name !== null)
+... {
+... result.cont_name = value.cont_name;
+... }
+... });
+... return result;
+... }
+2014-11-09T19:07:17.179-0800 SyntaxError: Unexpected token {
+> r = function(key, values){ var restult = {total: 0, cont_name: 0}; values.forE
+ach(function(value)){ result.total += (value.total !== null); if(result.cont_nam
+e ===0 && value.cont_name !== null) { result.cont_name = value.cont_name; } });
+return result; }
+2014-11-09T19:08:32.725-0800 SyntaxError: Unexpected token )
+> r = function(key,values){
+... var result = { total:0, cont_name:0}
+... values.forEach(function(value){
+... result.total += (value.total !== null);
+... if(result.cont_name === 0 &&
+... value.cont_name !== null
+... ){
+... result.cont_name = value.cont_name;
+... }
+... });
+... return result;
+... }
+function (key,values){
+var result = { total:0, cont_name:0}
+values.forEach(function(value){
+result.total += (value.total !== null);
+if(result.cont_name === 0 &&
+value.cont_name !== null
+){
+result.cont_name = value.cont_name;
+}
+});
+return result;
+}
+>

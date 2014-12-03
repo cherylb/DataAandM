@@ -1,0 +1,113 @@
+# week 13 quiz
+
+
+#1
+
+#1  ##### R code #####
+library(microbenchmark)
+#simple function
+
+totals <- function(){
+  n <- rnorm(10)
+  x <- sum(n)
+  y <- mean(n)
+  results <- c(x,y)
+  return(results) 
+}
+
+totals()
+
+#time function
+m <- 1:10000
+
+#using system.time
+system.time(for(i in m) totals())
+
+#using microbenchmark
+microbenchmark(totals(),times = 10000)
+
+#1 ##### R Results #####
+> totals()
+[1] -7.8501284 -0.7850128
+> 
+> #time function
+> m <- 1:10000
+> 
+> #using system.time
+> system.time(for(i in m) totals())
+   user  system elapsed 
+   0.12    0.00    0.13 
+> 
+> #using microbenchmark
+> microbenchmark(totals(),times = 10000)
+Unit: microseconds
+     expr   min     lq     mean median     uq      max neval
+ totals() 8.981 10.264 15.11332 10.265 10.692 39802.99 10000
+
+
+#1 ##### Julia Code #####
+
+function simple()
+   b = randn(10)
+   x = sum(b)
+   y = mean(b)
+   c = (x,y)
+   return(c)
+end
+
+function f(n)
+    for i = 1:n
+        s = simple()
+    end
+end
+
+@time(f(1))
+
+@time(f(10000))
+
+#1 ##### Julia Results ######
+
+week 13 quiz cb
+
+ignore first   elapsed time: 0.005300764 seconds (106124 bytes allocated)
+use this   elapsed time: 0.002796426 seconds (1280080 bytes allocated)
+
+
+#2
+##### Create Table in Postgresql
+
+CREATE TABLE books (
+bookid SERIAL PRIMARY KEY, 	
+title VARCHAR UNIQUE,
+qty INT)
+
+##### Create Function to insert new data
+
+CREATE FUNCTION newdata(booktitle TEXT, qtysold INT) RETURNS VOID AS $$
+BEGIN
+	UPDATE books SET qty = qtysold WHERE title = booktitle;
+	IF found THEN 
+		RETURN;
+	END IF;
+	
+	BEGIN 
+		INSERT INTO books(title, qty) 
+		VALUES(booktitle, qtysold);
+		RETURN;
+	END;
+END;
+$$
+LANGUAGE plpgsql;	
+
+
+
+##### Use function
+
+Select newdata('book1', 23);
+Select newdata('book2', 34);
+Select newdata('book1', 33);
+
+Results in :
+
+1;"book1";33
+2;"book2";34

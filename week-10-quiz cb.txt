@@ -1,0 +1,103 @@
+C:\Program Files\MongoDB 2.6 Standard\bin>mongoimport -d zipdata -c zips --file
+C:\Users\Cheryl\Documents\zips.json
+connected to: 127.0.0.1
+2014-11-02T16:13:11.063-0800 check 9 29353
+2014-11-02T16:13:11.064-0800 imported 29353 objects
+
+
+Required Questions
+For the first few questions, we will use the data as is to answer the following questions:
+1.	Which states have populations less than eight million?
+
+	> var mapFun1 = function() {
+	... emit(this.state, this.pop);
+	... };
+
+	> var redFun1 = function(keystate, valpop){
+	... return Array.sum(valpop);
+	... };
+
+	> db.zips.mapReduce(
+	... mapFun1,
+	... redFun1,
+	... {out: "pop_bystate"}
+	... )
+
+	{
+        "result" : "pop_bystate",
+        "timeMillis" : 365,
+        "counts" : {
+                "input" : 29353,
+                "emit" : 29353,
+                "reduce" : 346,
+                "output" : 51
+        },
+        "ok" : 1
+	}
+
+> db.pop_bystate.find({value :{$lt : 8000000}}).count()
+43
+>
+> db.pop_bystate.find({value :{$lt : 8000000}}).sort({value: -1})
+{ "_id" : "NJ", "value" : 7730188 }
+{ "_id" : "NC", "value" : 6628637 }
+{ "_id" : "GA", "value" : 6478216 }
+{ "_id" : "VA", "value" : 6181479 }
+{ "_id" : "MA", "value" : 6016425 }
+{ "_id" : "IN", "value" : 5544136 }
+{ "_id" : "MO", "value" : 5110648 }
+{ "_id" : "WI", "value" : 4891769 }
+{ "_id" : "TN", "value" : 4876457 }
+{ "_id" : "WA", "value" : 4866692 }
+{ "_id" : "MD", "value" : 4781379 }
+{ "_id" : "MN", "value" : 4372982 }
+{ "_id" : "LA", "value" : 4217595 }
+{ "_id" : "AL", "value" : 4040587 }
+{ "_id" : "KY", "value" : 3675484 }
+{ "_id" : "AZ", "value" : 3665228 }
+{ "_id" : "SC", "value" : 3486703 }
+{ "_id" : "CO", "value" : 3293755 }
+{ "_id" : "CT", "value" : 3287116 }
+{ "_id" : "OK", "value" : 3145585 }
+Type "it" for more
+> it
+{ "_id" : "OR", "value" : 2842321 }
+{ "_id" : "IA", "value" : 2776420 }
+{ "_id" : "MS", "value" : 2573216 }
+{ "_id" : "KS", "value" : 2475285 }
+{ "_id" : "AR", "value" : 2350725 }
+{ "_id" : "WV", "value" : 1793146 }
+{ "_id" : "UT", "value" : 1722850 }
+{ "_id" : "NE", "value" : 1578139 }
+{ "_id" : "NM", "value" : 1515069 }
+{ "_id" : "ME", "value" : 1226648 }
+{ "_id" : "NV", "value" : 1201833 }
+{ "_id" : "NH", "value" : 1109252 }
+{ "_id" : "HI", "value" : 1108229 }
+{ "_id" : "ID", "value" : 1006749 }
+{ "_id" : "RI", "value" : 1003218 }
+{ "_id" : "MT", "value" : 798948 }
+{ "_id" : "SD", "value" : 695397 }
+{ "_id" : "DE", "value" : 666168 }
+{ "_id" : "ND", "value" : 638272 }
+{ "_id" : "DC", "value" : 606900 }
+Type "it" for more
+> it
+{ "_id" : "VT", "value" : 562758 }
+{ "_id" : "AK", "value" : 544698 }
+{ "_id" : "WY", "value" : 453528 }
+
+
+2.	What is the fifth largest city in New York?
+	> db.zips.aggregate([ 
+		{$match: { state : "NY"}}, 
+		{$group: { _id: "$city",  total_pop : { $sum: "$pop"}}},
+		{$sort: {total_pop: -1}},{$limit: 5},{$skip:4} ])
+
+	{ "_id" : "STATEN ISLAND", "total_pop" : 378977 }
+
+3.	What is the total number of cities in each state according to this data set?
+	>
+	> db.zips.distinct("city",{state: "NY"}).length
+	1370
+	>

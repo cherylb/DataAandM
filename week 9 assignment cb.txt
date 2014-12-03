@@ -1,0 +1,45 @@
+
+Import to collection uniteddata 
+
+From the regular command prompt and not mongo.exe:  
+ 
+C:\Program Files\MongoDB 2.6 Standard\bin>mongoimport -d unitedstates -c unitedd
+ata --type csv --headerline --file C:/Users/Cheryl/Documents/statedata.csv
+connected to: 127.0.0.1
+2014-10-28T17:17:31.076-0700 check 9 51
+2014-10-28T17:17:31.077-0700 imported 50 objects
+
+C:\Program Files\MongoDB 2.6 Standard\bin>mongoimport -d unitedstates -c unitedd
+ata --type tsv --headerline --file C:/Users/Cheryl/Documents/inhabitedterritoryd
+ata.txt
+connected to: 127.0.0.1
+2014-10-28T17:25:32.608-0700 imported 5 objects
+
+C:\Program Files\MongoDB 2.6 Standard\bin>mongoimport -d unitedstates -c unitedd
+ata --type tsv --headerline --file C:/Users/Cheryl/Documents/districtdata.txt
+connected to: 127.0.0.1
+2014-10-28T17:26:01.502-0700 imported 1 objects
+C:\Users\Cheryl\Documents\zips.json
+
+Verify from mongo.exe 
+switched to db unitedstates
+Verify 	: 
+	> db.uniteddata.find({territory : "Guam"})
+	{ "_id" : ObjectId("545033fca0e0f272f5817622"), "territory" : "Guam", "abbr" : "
+	GU", "capital" : "Hagatna", "acquisition_year" : 1899, "territorial_status" : "\
+	"Unincorporated, organized\"", "population" : 159358, "area_sq_miles" : 571, "la
+	nd_area_sq_miles" : 210, "house_seats" : 1 }
+Verify district
+	> db.uniteddata.find({federal_district : /Washington/})
+	{ "_id" : ObjectId("54503419a0e0f272f5817626"), "federal_district" : "\"Washingt
+	on, D.C.\"", "abbr" : "DC", "establishment_date" : "7/16/1790", "population" : 6
+	46449, "area_sq_miles" : 68, "land_area_sq_miles" : 61, "house_seats" : 1 }
+Verify states
+	> db.uniteddata.find({state : "Alaska"})
+	{ "_id" : ObjectId("5450321ba0e0f272f58175f0"), "state" : "Alaska", "abbr" : "AK
+	", "capital_city" : "Juneau", "largest_city" : "Anchorage", "population" : 73513
+	2, "area_sq_miles" : 665384, "land_area_sq_miles" : 570641, "house_seats" : 1, "
+	statehood_date" : "1/3/1959" }
+>
+
+

@@ -1,0 +1,48 @@
+
+#1 Load data and relationships
+
+Create Dish nodes
+load csv with headers from "file:///C:/Users/Cheryl/Documents/dishes.csv" as dishes create (d1:Dish {name:dishes.Name, decription:dishes.desc, id:dishes.ID, origin:dishes.origin})
+
+Create User nodes
+load csv with headers from "file:///C:/Users/Cheryl/Documents/users.csv" as user merge  (u1:User {name: user.Name, id: user.ID, type: user.UserType})
+
+Create Food nodes
+load csv with headers from "file:///C:/Users/Cheryl/Documents/foods.csv" as food merge (f1:Food{name: food.Name, id:food.ID, type:food.Type, description: food.Desc, allergen: food.Allergen, availablity: food.Avail})
+
+Create Add relationships
+load csv with headers from "file:///C:/Users/Cheryl/Documents/foods.csv" as addr
+match (a: Dish{name:addr.UsedIn}),(b: Food{id: addr.ID}) 
+foreach(n IN (CASE when addr.ConnectType = 'Add' then [1] else [] END)|
+	merge (a)-[r: add {createdby: addr.CreateBy, amt: addr.Amount, note: addr.Notes}]->(b))
+
+Create Primary relationships
+load csv with headers from "file:///C:/Users/Cheryl/Documents/foods.csv" as prime match (a: Dish {name: prime.UsedIn}),(b: Food {id: prime.ID}) 
+foreach(n IN (CASE when prime.ConnectType = 'Primary' then [1] else [] END)|
+merge (a)-[r:primary {createdby: prime.CreateBy, amt: prime.Amount, note: prime.Notes}]->(b))
+
+Create Swap relationships
+load csv with headers from "file:///C:/Users/Cheryl/Documents/food2.csv" as swap
+match (a: Food {name: swap.Swaps}), (b: Food {id: swap.ID}) 
+foreach(n IN (CASE when swap.ConnectType = 'Swap' then [1] else [] END)|
+	merge (a)-[r: swap {createdby: swap.CreateBy, amt: swap.Amount, note: swap.Notes}]->(b))
+
+Create Tried relationships
+load csv with headers from "file:///C:/Users/Cheryl/Documents/food2.csv" as try
+match (a: User {name: try.Triedby}), (b: Food{id: try.ID})
+create (a)-[r: tried {rating: try.TriedRate}]->(b)
+
+
+
+#2 - Compare to sql database
+Determining if an SQL database might be a better solution than this graph database depends on the main purpose of the database. If the purpose is to track student information, then the first-degree relationships between student and courses or other information are important, but the nth degree relationships are not relevant. There would likely be the same information tracked for every student.  In this case a more linear and rigid SQL structure may be most appropriate. However, if the main purpose of this database is to facilitate connections between students in the same courses, or understand the relationships between housemates, then the emphasis is on the connections between things, and the chain of relationships becomes critical. In that case, the graphical database is much more fitting because the relationships are the focus of that design, and it allows a great deal of flexibility in how they are created and followed.
+
+#3 finding roomates for Richard
+match(Student {lastname: 'Kowalski'}) - [:housed] -()-[:housed]-(roomy)
+return roomy
+
+#4 recording completed grade for Richard
+match(Student {lastname: 'Kowalski'}) - [r: enrolled {section: '12136'}] - ( course) 
+create (Student) - [r2: completed {section: r.section, instructor: r.instructor, grade:"B"}] -> (course) 
+set r2 = r 
+with r delete r
